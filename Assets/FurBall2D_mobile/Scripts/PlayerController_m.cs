@@ -12,17 +12,21 @@ public class PlayerController_m : MonoBehaviour {
 	public bool lookingRight = true;
 	bool doubleJump = false;
 	public GameObject Boost;
+    public GUIText scoreText;
 //	private Animator cloudanim;
 	public GameObject Cloud;
 	private Rigidbody2D rb2d;
 	private Animator anim;
 	private bool isGrounded = false;
+    private int score;
 
 
 	void Start () {
 		rb2d = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator>();
 		Cloud = GameObject.Find("Cloud");
+        score = 0;
+        UpdateScore();
 	}
 	
 
@@ -54,9 +58,13 @@ public class PlayerController_m : MonoBehaviour {
 			rb2d.AddForce(new Vector2(0,-jumpForce));
 			Boost = Instantiate(Resources.Load("Prefabs/Cloud"), transform.position, transform.rotation) as GameObject;
 		}
-
+ 
 	}
 
+    void UpdateScore()
+    {
+        scoreText.text = "SCORE: " + score;
+    }
 
 	void FixedUpdate()
 	{
@@ -78,7 +86,15 @@ public class PlayerController_m : MonoBehaviour {
 			Flip ();
 		 
 		anim.SetFloat ("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
-	}
+
+        Debug.Log(this.transform.position.y);
+        if (this.transform.position.y > score)
+        {
+
+            score = (int)this.transform.position.y;
+        }
+        UpdateScore();
+    }
 
 
 	
